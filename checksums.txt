@@ -1,0 +1,15 @@
+sha256:
+------------------------------------
+d0873b60758874d4c26b91f15776c6131b74d186  checksums.txt
+482e3d1a5c6034733476bb5bb44c5eeb1ef8612e  pigeon-cli
+e875cc8ced23aafdabdaca4e3d27940482318c70  pigeon-qt
+39511e47521d39f28a2a5f00916d15f8fbe2e84f  pigeon-tx
+bd37c599cc33728c5408c9c68dcb3828b21973b0  pigeond
+------------------------------------
+openssl-sha256:
+------------------------------------
+5a22c548543eb7d6b8e5d5ff02d60175366f6a3f2d0f65ec3463d72ae276a86b  checksums.txt
+8a28a9d813522104ca260dbe8655bf24a621d030ad87fa5b7da470d9c81b566d  pigeon-cli
+53aef052f1544d8b7cda964b6bc737097005fe4b225771f8456e911343aabc14  pigeon-qt
+22b832fd6dace33fcdee0bee5346456b888f9fba9ff0ae816803e4cf1295d2a5  pigeon-tx
+2dedf66b80cda906867f3459fc13b00f6be449e31b531dd54f4fd28f56d8f6da  pigeond
