@@ -1,102 +1,127 @@
 [
   {
     "txid": "28e3ed2dfaaccef68cc36e7e7c155669e31fb686b1c9a0ebe00693fb9f3a1d0b",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97457044
   },
   {
     "txid": "c48f1eaf3fe5891eb2b941b40a8d8e3b5dcc89f340f08853d77a1cc875877c82",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97438550
   },
   {
     "txid": "0b0452cabab720e3846d1d7f2355a62abeb3d04297374b14b0ee1295162d4fe6",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97414046
   },
   {
     "txid": "0c5c9a226577a8a3997a669c06d47df724facd8dc3dd4f2a9ba23b2377dbe882",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97384415
   },
   {
     "txid": "760dd11ef035fb1a9f747028ba0d1e68a6b158e1004e0af17ff360b4fe019332",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97352064
   },
   {
     "txid": "c947b44289b2ba69ff2efdbbe1ebe42192f4d6ebe0c4f91b93c194abdf7f8ebb",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97325482
   },
   {
     "txid": "262ba1200b2c05bdce7b1612175b32f140d19d627bf6bdb23026911a34fe0f6b",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97317826
   },
   {
     "txid": "778d56a457f74fa52e3240e45c07c4c006823d09617e594ede347c1ff983fa72",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97291448
   },
   {
     "txid": "a24a448f68f17503ea16c536a49e27e10f01d33cdd406532325fc9727ed26aa9",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97290200
   },
   {
     "txid": "f1cd7179a796af0cc3d7549d8a58bae129b888bd84dd7ddd31a7b489464c612f",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97273042
   },
   {
     "txid": "6ff572736b5789620df7280f5d9ce5e322edc7f01ee70d4610e3e9ca4ced230f",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97222094
   },
   {
     "txid": "7b67a426f5132a14def3cfd1b09a6046a24031014410f4bf9edf8ebc3d677a2e",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97202090
   },
   {
     "txid": "f588314faf5d64acfb0de8036a112b6edbcf4594f1d07e7b39a5b649a91c4f87",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97181118
   },
   {
     "txid": "cb298ab2601bde41c7e11ed7a0db90c8bd8b2cfad60b2a560db2a97969938a9e",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97147177
   },
   {
     "txid": "cd2e69748b70b45b5ce4d82717b795c1b73099c7c45af306fc9710378ae75e6e",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97140235
   },
   {
     "txid": "e3c30f903255cfd16d04917311f528ed34d83d3c759657d7bd658b4cfc822eda",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97136608
   },
   {
     "txid": "acdb1c46037d7a3eca5f31f89cfcc1f86af6a418281a9478ad99c97fd62e74e5",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97108954
   },
   {
     "txid": "bed7b989b93927616e7560c3d865458978b695e2fa8839654316b72f4db312dd",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97101504
   },
   {
     "txid": "00c0f2077211f94261fcf405ba3a337c018ab4a2a4e3a94b32bcdf304281a2c6",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97060440
   },
   {
     "txid": "32fddef34ca5701e8e6db3889f2a1c0e4b42d004c9b9eb18902760bc8973ee2d",
-    "vout": 0
+    "vout": 0,
+    "amount": 26999.97059651
   },
   {
     "txid": "e1229bb9e105e9788a241764a76235e2d0a0a08e7e34b6c9380bfaf8c593fbd1",
-    "vout": 0
+    "vout": 0,
+    "amount": 26750.45594924
   },
   {
     "txid": "b840a70ee360ba836cc27c5e3de74d1640759f0ce929eceb4c865bf275b16a23",
-    "vout": 0
+    "vout": 0,
+    "amount": 26750.07128790
   },
   {
     "txid": "f80f9b9241f037a8d397798f559f187641ecdea7e16e09298b1dff744c1d3120",
-    "vout": 0
+    "vout": 0,
+    "amount": 26750.06559647
   },
   {
     "txid": "c15d3a8579d3a06d1338df8fc412f65099359ddaf409defae6923d7c1f9e2baf",
-    "vout": 0
+    "vout": 0,
+    "amount": 26750.05838281
   },
   {
     "txid": "e4f4659c52de3073c94db65f74ed7733c325737abc466a99f19fb976308c668d",
-    "vout": 0
+    "vout": 0,
+    "amount": 26750.05743145
   }
 ]
