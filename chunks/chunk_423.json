@@ -1,26 +1,32 @@
 [
   {
     "txid": "f1b423af4333e48d18947c4e4cc2c876c7de74c03a69ded94dd1d1a4c9f2c7f5",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   },
   {
     "txid": "1bec9621da18714c5da72d5a4d16048e23a8128abbe34b5de4f80dba72ba38f6",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   },
   {
     "txid": "8c61daabde6ac15b2bdfa6064c0fb2ed3f27380c009b23bd4abcd1d10b5012f7",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   },
   {
     "txid": "578e2743c2f50cc0c8cb42c0dd196a206720caf7b5445f38824b5523a7911ff8",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   },
   {
     "txid": "186df3d2f8e28b2b2f001bcd7fa160d9aee5e8e9fbc5c388314a666df478f7f8",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   },
   {
     "txid": "fbb75057f2dc660e8f7ed486ae98d95bbab1e1117f4734e45a954125aca4b4ff",
-    "vout": 0
+    "vout": 0,
+    "amount": 0E-8
   }
 ]
