@@ -3,6 +3,7 @@ set -euo pipefail
 
 # ================= CONFIG =================
 CLI="./pigeon-cli"
+DAEMON="./pigeond"
 CHUNKS_DIR="chunks"
 BUILD_DIR="build"
 OUTPUT_DIR="signed"
@@ -25,6 +26,66 @@ if [ ! -f "$CLI" ]; then
   echo "ERROR: $CLI not found. Make sure pigeon-cli is in the current directory."
   exit 1
 fi
+
+# Function to check if daemon is running
+check_daemon_running() {
+  "$CLI" getinfo >/dev/null 2>&1 || return 1
+}
+
+# Function to wait for daemon to be ready
+wait_for_daemon() {
+  local max_attempts=30
+  local attempt=0
+  
+  echo "Waiting for daemon to be ready..."
+  while [ $attempt -lt $max_attempts ]; do
+    if check_daemon_running; then
+      echo "Daemon is ready!"
+      return 0
+    fi
+    attempt=$((attempt + 1))
+    echo "  Attempt $attempt/$max_attempts..."
+    sleep 2
+  done
+  
+  echo "ERROR: Daemon failed to start or become ready after $max_attempts attempts"
+  return 1
+}
+
+# Check if daemon is already running
+echo "Checking if pigeon daemon is running..."
+if check_daemon_running; then
+  echo "Daemon is already running."
+else
+  echo "Daemon is not running. Starting daemon..."
+  
+  # Check for daemon executable
+  if [ ! -f "$DAEMON" ]; then
+    # Try alternative location
+    if [ -f "pgn/bin/pigeond" ]; then
+      DAEMON="pgn/bin/pigeond"
+    else
+      echo "ERROR: $DAEMON not found. Make sure pigeond is available."
+      echo "  Tried: ./pigeond"
+      echo "  Tried: ./pgn/bin/pigeond"
+      exit 1
+    fi
+  fi
+  
+  # Start daemon in background
+  echo "Starting $DAEMON..."
+  "$DAEMON" -daemon >/dev/null 2>&1 || {
+    echo "ERROR: Failed to start daemon"
+    exit 1
+  }
+  
+  # Wait for daemon to be ready
+  if ! wait_for_daemon; then
+    exit 1
+  fi
+fi
+
+echo ""
 
 # Count chunks processed
 PROCESSED=0
