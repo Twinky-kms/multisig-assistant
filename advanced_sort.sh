@@ -18,7 +18,7 @@ fi
 TOTAL=$(jq 'length' "$INPUT_FILE")
 echo "Total UTXOs in $INPUT_FILE: $TOTAL"
 
-# Create chunk files: each file is an array of {txid, vout}
+# Create chunk files: each file is an array of {txid, vout, amount}
 # Named chunks/chunk_000.json, chunk_001.json, ...
 jq -c --argjson n "$CHUNK_SIZE" '
   [ .[] | {txid, vout, amount} ]                      # keep amount too (useful)
@@ -30,7 +30,7 @@ jq -c --argjson n "$CHUNK_SIZE" '
 | while IFS= read -r chunk; do
     idx=$(echo "$chunk" | jq -r '.idx')
     file=$(printf "%s/chunk_%03d.json" "$OUT_DIR" "$idx")
-    echo "$chunk" | jq '.items | map({txid, vout})' > "$file"
+    echo "$chunk" | jq '.items | map({txid, vout, amount})' > "$file"
     count=$(jq 'length' "$file")
     echo "Wrote $file ($count inputs)"
   done
