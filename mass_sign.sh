@@ -126,11 +126,7 @@ for chunk_file in "$CHUNKS_DIR"/chunk_*.json; do
   
   # Convert to number for comparison (handle scientific notation like 0e-8)
   # Use awk to safely convert and compare
-  SHOULD_SKIP=$(awk -v a="$TOTAL_AMOUNT" 'BEGIN {
-    num = a + 0;
-    if (num <= 0) exit 0;  # skip
-    exit 1;  # don't skip
-  }' 2>/dev/null && echo "yes" || echo "no")
+  SHOULD_SKIP=$(awk -v a="$TOTAL_AMOUNT" 'BEGIN { num = a + 0; if (num <= 0) exit 0; exit 1; }' 2>/dev/null && echo "yes" || echo "no")
   
   # Skip chunks with zero or negative amount
   if [ "$SHOULD_SKIP" = "yes" ]; then
@@ -171,16 +167,16 @@ for chunk_file in "$CHUNKS_DIR"/chunk_*.json; do
   
   # Save full result JSON for reference
   RESULT_FILE="$OUTPUT_DIR/tx_${TX_ID}_result.json"
-  echo "$SIGNED_RESULT" | jq '.' > "$RESULT_FILE" 2>/dev/null || echo "$SIGNED_RESULT" > "$RESULT_FILE"
+  echo "$SIGNED_RESULT" | jq . > "$RESULT_FILE" 2>/dev/null || echo "$SIGNED_RESULT" > "$RESULT_FILE"
   
   # Check if complete
   COMPLETE=$(echo "$SIGNED_RESULT" | jq -r '.complete // false' 2>/dev/null || echo "false")
   
   if [ "$COMPLETE" = "true" ]; then
-    echo "  ✓ Signed and complete: $OUTPUT_FILE"
+    echo "  Signed and complete: $OUTPUT_FILE"
     ((SIGNED++)) || true
   else
-    echo "  → Partial signature: $OUTPUT_FILE (needs more signatures)"
+    echo "  Partial signature: $OUTPUT_FILE (needs more signatures)"
     ((SIGNED++)) || true
   fi
 done

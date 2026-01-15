@@ -97,7 +97,12 @@ fi
 echo ""
 
 # Count UTXOs
-TOTAL_UTXOS=$(jq 'length' "$INPUT_FILE")
+TOTAL_UTXOS=$(jq 'length' "$INPUT_FILE" 2>&1)
+if [ -z "$TOTAL_UTXOS" ] || [ "$TOTAL_UTXOS" = "null" ]; then
+  echo "ERROR: Failed to read $INPUT_FILE or file is malformed"
+  exit 1
+fi
+
 echo "Total UTXOs in $INPUT_FILE: $TOTAL_UTXOS"
 
 if [ "$TOTAL_UTXOS" -eq 0 ]; then
@@ -115,6 +120,7 @@ CHUNKS_CREATED=0
 CHUNKS_SKIPPED=0
 
 # Stream chunks and build transactions
+{
 jq -c \
   --arg rs "$OLD_REDEEM_SCRIPT" \
   --argjson n "$CHUNK_SIZE" \
@@ -131,27 +137,34 @@ jq -c \
   ]
 | .[]
 JQ
-while IFS= read -r chunk_data; do
-  IDX=$(echo "$chunk_data" | jq -r '.idx')
+} | while IFS= read -r chunk_data; do
+  # Skip empty lines
+  [ -z "$chunk_data" ] && continue
+  
+  IDX=$(echo "$chunk_data" | jq -r .idx)
   CHUNK_FILE=$(printf "%s/chunk_%03d.json" "$OUTPUT_DIR" "$IDX")
   
   COUNT=$(echo "$chunk_data" | jq -r '.inputs | length')
   TOTAL_IN=$(echo "$chunk_data" | jq -r '[.inputs[].amount] | add // 0')
   
+  # Debug: Check if TOTAL_IN is valid
+  if [ -z "$TOTAL_IN" ] || [ "$TOTAL_IN" = "null" ]; then
+    echo "ERROR: Failed to calculate total_in for chunk_$(printf "%03d" "$IDX")"
+    echo "Chunk data: $(echo "$chunk_data" | head -c 200)"
+    ((CHUNKS_SKIPPED++)) || true
+    continue
+  fi
+  
   # Calculate amount out (total_in - fee)
-  AMOUNT_OUT=$(awk -v t="$TOTAL_IN" -v f="$FEE" 'BEGIN {
-    o = t - f;
-    if (o <= 0) { exit 2; }
-    printf "%.8f\n", o
-  }') || {
+  AMOUNT_OUT=$(awk -v t="$TOTAL_IN" -v f="$FEE" 'BEGIN { o = t - f; if (o <= 0) { exit 2; } printf "%.8f\n", o }') || {
     echo "SKIP: chunk_$(printf "%03d" "$IDX") - output amount <= 0 (total_in=$TOTAL_IN fee=$FEE)"
     ((CHUNKS_SKIPPED++)) || true
     continue
   }
   
   # Prepare transaction data
-  INPUTS_JSON=$(echo "$chunk_data" | jq -c '.inputs_only')
-  PREVTXS_JSON=$(echo "$chunk_data" | jq -c '.prevtxs')
+  INPUTS_JSON=$(echo "$chunk_data" | jq -c .inputs_only)
+  PREVTXS_JSON=$(echo "$chunk_data" | jq -c .prevtxs)
   OUTPUTS_JSON=$(jq -n --arg a "$NEW_MULTISIG_ADDRESS" --arg v "$AMOUNT_OUT" '{($a): ($v|tonumber)}')
   
   # Create raw unsigned transaction
