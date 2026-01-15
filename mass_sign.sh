@@ -5,7 +5,6 @@ set -euo pipefail
 CLI="./pigeon-cli"
 DAEMON="./pigeond"
 CHUNKS_DIR="chunks"
-BUILD_DIR="build"
 OUTPUT_DIR="signed"
 
 # Private key - can be set via environment variable or as argument
@@ -94,8 +93,7 @@ SIGNED=0
 ERRORS=0
 
 echo "Starting mass signing..."
-echo "Chunks directory: $CHUNKS_DIR"
-echo "Build directory: $BUILD_DIR"
+echo "Chunks directory: $CHUNKS_DIR (self-contained with transaction hex)"
 echo "Output directory: $OUTPUT_DIR"
 echo ""
 
@@ -110,40 +108,21 @@ for chunk_file in "$CHUNKS_DIR"/chunk_*.json; do
   [ -z "$CHUNK_IDX" ] && CHUNK_IDX=0
   CHUNK_IDX=$((10#$CHUNK_IDX))
   
-  # Convert to 6-digit padded transaction ID
+  # Convert to 6-digit padded transaction ID (for display purposes)
   TX_ID=$(printf "%06d" "$CHUNK_IDX")
   
-  HEX_FILE="$BUILD_DIR/tx_${TX_ID}_unsigned.hex"
-  PREV_FILE="$BUILD_DIR/tx_${TX_ID}_prevtxs.json"
+  # Check if chunk has the new format with embedded transaction data
+  HAS_TRANSACTION=$(jq -r 'has("transaction")' "$chunk_file" 2>/dev/null || echo "false")
   
-  # Check if transaction files exist
-  if [ ! -f "$HEX_FILE" ] || [ ! -f "$PREV_FILE" ]; then
-    echo "SKIP: $CHUNK_BASENAME -> tx_${TX_ID} (missing transaction files)"
+  if [ "$HAS_TRANSACTION" = "false" ]; then
+    echo "SKIP: $CHUNK_BASENAME -> tx_${TX_ID} (old format chunk, missing transaction data)"
+    echo "      Run build_chunks_with_hex.sh to regenerate chunks with transaction hex"
     ((SKIPPED++)) || true
     continue
   fi
   
-  # Calculate total amount in chunk
-  # Try to get amount from chunk file first (if it has amount field)
-  TOTAL_AMOUNT=$(jq -r '[.[].amount // empty] | add // 0' "$chunk_file" 2>/dev/null || echo "0")
-  
-  # If amount is 0 or empty, try to get from utxos_sorted.json by matching txid/vout
-  if [ -z "$TOTAL_AMOUNT" ] || [ "$TOTAL_AMOUNT" = "0" ] || [ "$TOTAL_AMOUNT" = "null" ]; then
-    if [ -f "utxos_sorted.json" ]; then
-      # Build a jq filter to match all txid/vout pairs and sum amounts
-      TOTAL_AMOUNT=$(jq -r --slurpfile chunk "$chunk_file" '
-        . as $db |
-        ($chunk[0] | map({txid, vout})) as $needles |
-        [
-          $db[] | 
-          select(
-            . as $u | 
-            $needles | map(select(.txid == $u.txid and .vout == $u.vout)) | length > 0
-          ) | .amount
-        ] | add // 0
-      ' "utxos_sorted.json" 2>/dev/null || echo "0")
-    fi
-  fi
+  # Get total amount from embedded transaction data
+  TOTAL_AMOUNT=$(jq -r '.transaction.total_in // 0' "$chunk_file" 2>/dev/null || echo "0")
   
   # Convert to number for comparison (handle scientific notation like 0e-8)
   # Use awk to safely convert and compare
@@ -164,9 +143,9 @@ for chunk_file in "$CHUNKS_DIR"/chunk_*.json; do
   
   echo "Processing: $CHUNK_BASENAME -> tx_${TX_ID} (amount: $TOTAL_AMOUNT)"
   
-  # Read transaction files
-  HEX=$(cat "$HEX_FILE")
-  PREV=$(cat "$PREV_FILE")
+  # Read transaction data from chunk file
+  HEX=$(jq -r '.transaction.unsigned_hex' "$chunk_file")
+  PREV=$(jq -c '.transaction.prevtxs' "$chunk_file")
   
   # Sign the transaction
   SIGNED_RESULT=$($CLI signrawtransaction "$HEX" "$PREV" "[\"$PRIVATE_KEY\"]" 2>&1) || {
