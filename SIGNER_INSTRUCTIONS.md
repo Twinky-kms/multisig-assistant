@@ -31,6 +31,10 @@ Download the official archive and extract it to get the checksums file.
 
 ```bash
 # Navigate to the binaries directory
+cd /path/to/signing/files
+ 
+# Install dependencies
+sudo apt-get install jq zip
 
 # Calculate SHA256 checksums
 sha256sum pigeond pigeon-cli
@@ -269,18 +273,6 @@ A: **NO**. Send them to the coordinator who will combine signatures and broadcas
 **Q: What if some transactions error?**  
 A: Note which ones failed and tell the coordinator. A few errors out of hundreds is usually fine.
 
-**Q: Can I use the same private key on multiple computers?**  
-A: Yes, but verify the binaries on each system.
-
-**Q: What's in the result.json files?**  
-A: Signing metadata. Example:
-```json
-{
-  "hex": "0200000001a1b2c3d4...",
-  "complete": false
-}
-```
-
 **Q: How do I know signing worked?**  
 A: Check the summary at the end. If "Signed: N" matches "Processed: N" with "Errors: 0", you're good.
 
@@ -304,12 +296,13 @@ Here's what a complete signing session looks like:
 cd /path/to/signing/files
 
 # 2. Verify checksums (compare with official release)
+sha256sum pigeon-cli pigeond
 
 # 3. Install dependencies
 sudo apt-get install jq zip
-sha256sum pigeon-cli pigeond
 
 # 4. Run signing
+chmod +x mass_sign.sh
 ./mass_sign.sh YOUR_PRIVATE_KEY
 
 # Wait for completion...
