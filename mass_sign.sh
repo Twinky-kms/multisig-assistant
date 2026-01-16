@@ -7,14 +7,15 @@ DAEMON="./pigeond"
 CHUNKS_DIR="chunks"
 OUTPUT_DIR="signed"
 
-# Private key - can be set via environment variable or as argument
-PRIVATE_KEY="${PRIVATE_KEY:-${1:-}}"
+# Private key - must be passed as argument
+PRIVATE_KEY="${1:-}"
 # ==========================================
 
 if [ -z "$PRIVATE_KEY" ]; then
   echo "ERROR: Private key required."
   echo "Usage: $0 <PRIVATE_KEY>"
-  echo "   OR: PRIVATE_KEY='your_key' $0"
+  echo ""
+  echo "SECURITY REMINDER: After signing, clear your history with: history -c"
   exit 1
 fi
 
@@ -190,4 +191,10 @@ echo "  Skipped: $SKIPPED"
 echo "  Errors: $ERRORS"
 echo ""
 echo "Signed transactions saved to: $OUTPUT_DIR/"
+echo ""
+echo "=========================================="
+echo "SECURITY REMINDER:"
+echo "  Your private key is in your shell history!"
+echo "  Clear it now with: history -c"
+echo "=========================================="
 
